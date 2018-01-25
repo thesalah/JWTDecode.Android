@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-class JWTPayload {
+public class JWTPayload {
 
     final String iss;
     final String sub;
