@@ -15,7 +15,7 @@ public class JWTPayload {
     final List<String> aud;
     private final  Map<String, Claim> tree;
 
-    JWTPayload(String iss, String sub, Date exp, Date nbf, Date iat, String jti, List<String> aud, Map<String, Claim> tree) {
+    public JWTPayload(String iss, String sub, Date exp, Date nbf, Date iat, String jti, List<String> aud, Map<String, Claim> tree) {
         this.iss = iss;
         this.sub = sub;
         this.exp = exp;
