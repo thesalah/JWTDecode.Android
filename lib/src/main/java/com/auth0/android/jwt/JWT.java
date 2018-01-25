@@ -27,6 +27,8 @@ public class JWT implements Parcelable {
     private final String token;
 
     private Map<String, String> header;
+
+
     private JWTPayload payload;
     private String signature;
 
@@ -38,6 +40,18 @@ public class JWT implements Parcelable {
      */
     public JWT(@NonNull String token) {
         decode(token);
+        this.token = token;
+    }
+
+    /**
+     * Decode a given string JWT token with custom payload class.
+     *
+     * @param token the string JWT token.
+     * @param payloadClass the class to which JWT to be decoded
+     * @throws DecodeException if the token cannot be decoded
+     */
+    public JWT(@NonNull String token, Class<? extends JWTPayload> payloadClass) {
+        decode(token,payloadClass);
         this.token = token;
     }
 
@@ -143,6 +157,15 @@ public class JWT implements Parcelable {
     }
 
     /**
+     * Get a Private Payload
+     *
+     * @return payload.
+     */
+    public JWTPayload getPayload() {
+        return payload;
+    }
+
+    /**
      * Validates that this JWT was issued in the past and hasn't expired yet.
      *
      * @param leeway the time leeway in seconds in which the token should still be considered valid.
@@ -202,6 +225,15 @@ public class JWT implements Parcelable {
         }.getType();
         header = parseJson(base64Decode(parts[0]), mapType);
         payload = parseJson(base64Decode(parts[1]), JWTPayload.class);
+        signature = parts[2];
+    }
+
+    private void decode(String token,Class<? extends JWTPayload> payloadClass) {
+        final String[] parts = splitToken(token);
+        Type mapType = new TypeToken<Map<String, String>>() {
+        }.getType();
+        header = parseJson(base64Decode(parts[0]), mapType);
+        payload = parseJson(base64Decode(parts[1]), payloadClass);
         signature = parts[2];
     }
 
